@@ -59,11 +59,11 @@ hexo new page "categories"
 ## 使用 Travis-CI 自动更新
 
 还记得我们的目标吗？只在 `code` 分支提交新 post，后续的 `hexo g`、push 到 master 分支上这样的小事，都不想操心。
-这时候迎面向我们走来的，是 Travis-CI 方阵。但热闹是`Next`作者的，我什么也没有。
+固定的工作，正式 Travis-CI 所擅长的。但热闹是`Next`作者的，我什么也没有。
 看看他的这篇文章，[使用 Travis CI 自动更新 GitHub Pages](http://notes.iissnan.com/2016/publishing-github-pages-with-travis-ci/)，原理是一样的。
 （文章有个坑，`GH_TOKEN`的大小写，加密时和配置文件中一定要保持一致）
 
-我们不能直接用 Travis 执行 `hexo g --deploy`，原因是部署的时候，Travis-CI 需要你的信息，来往 Github 提交代码。所以我们只能放弃这条命令，手动做它实际做的事情，最后用上文中提到的认证方式，让 Travis-CI 来提交代码。
+在我们的情况下，不能直接用 Travis 执行 `hexo g --deploy`，原因是部署的时候，Travis-CI 需要你的信息，来往 Github 提交代码。所以我们只能放弃这条命令，手动做它实际做的事情，最后用上面链接中提到的认证方式，让 Travis-CI 来提交代码。
 
 > 假设你和我一样，之前没用过 github 的 Travis-CI，要先去 [github integrations](https://github.com/integrations) 登录 Travis-CI，然后在[Travis profile](https://travis-ci.org/profile/)开启支持。
 
@@ -102,7 +102,7 @@ after_script:
   - cd .deploy_git
   - git init
   - git config user.name "daorren"
-  - git config user.email "daorenmc@gmail.com"
+  - git config user.email "abc@example.com"
   - git add .
   - git commit -m "Update by Travis CI"
   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master
@@ -111,10 +111,12 @@ after_script:
 # safelist
 branches:
   only:
-    - code
+    - code # 只在这个分支build
 env:
  global:
    - GH_REF: github.com/daorren/daorren.github.io.git
    - secure: "XXX"
 
 ```
+
+做到这里，基本就好了。总的来说，我是更喜欢 Hexo 的。
