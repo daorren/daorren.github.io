@@ -36,5 +36,5 @@ branches:
     - code
 env:
  global:
-   - GH_REF: github.com:daorren/daorren.github.io.git
+   - GH_REF: github.com/daorren/daorren.github.io.git
    - secure: "L01r4cKarEZDa3on/b4Zk3+tMIGcG022Iqw1boEldQucP8wTN8tfO70a8nqWkPcZs4CfVri6aEwNcjC+YnifM0x/4nFKCPkFLXULnejOuhtcyUBJQn4QO5vPvaITWaKEdCw9sbd9HaAAx7fmBhEbpRMURMwLE2bVlgA/3oF2VpZTrcXrrWvqOxe+7Q16QBcVgl02bS3xfVgkYDJB+1WvikaSRhpTWE68+xt/d816oSx47tlR4qDV2vKJnVMQq3GFA2Kq8k7qI+PXUPLFQMhB+Kyjt8g/QP8ujGqHLS/m8dnbbmLPY/p5uS+nHs2taJf/SepSOgXxYro7m8NDeAV4mh8p+ITDSGRl30IzQoGjV1TZlOydG16orogaJtJAN+rjHlPFgtK3MabLWOZlWlz5nVnFAkCj5MS3ph0TtcfFn9+6ogR4jPzUws+YFmD8z9l1gK2kLrU65m4cgLz3PQbFJHPTEvby/P1MUN/lKetWF24CuU51GX9/bcwjpP5cgPBz8il8oS61taynauZ3Sf8g3ThuHLpvDjh791aqkXNg4zeQAk3DmxZaulZLe3ZLqVqmxLd2fZhB/fzu3IT0gx5Jjbkz+4xuMZZaFpOBJwASIBR5V2tLUyeklaCUQ2A9lzB0aSipqo6XdUQrjMKjZYa/eMGAjF9m9dkkxFmQK5gz64s="
