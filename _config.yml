@@ -17,6 +17,9 @@ root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
+# GA
+google_analytics: UA-97826694-1
+
 # Directory
 source_dir: source
 public_dir: public
