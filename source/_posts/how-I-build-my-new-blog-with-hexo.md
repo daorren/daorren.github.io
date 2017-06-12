@@ -3,8 +3,8 @@ title: 如何用Hexo新建一个blog
 date: 2016-12-29 10:41:43
 tags: hexo
 ---
-一年多前，我看到一个很好看的 `Jekyll` 主题[leonids](https://github.com/renyuanz/leonids)（[leonids预览](https://renyuanz.github.io/leonids/)）。于是用它来建了第一个Github-Pages的博客。虽然他视觉元素很棒，但那时候的我还hold不住Jekyll。没实现`只要写好MD格式的post并提交，其他都不用管`的目标，所以写了一篇博文之后就晾着了。
-16年底我又回来了，缘起于一个清新的 `Hexo` 主题[Next](https://github.com/iissnan/hexo-theme-next)（[Next预览](http://notes.iissnan.com/)）。这次实现了需要的目标嘿嘿。
+一年多前，我看到一个很好看的 `Jekyll` 主题[leonids](https://github.com/renyuanz/leonids)（[预览](https://renyuanz.github.io/leonids/)）。于是用它来建了第一个Github-Pages的博客。虽然他视觉元素很棒，但那时候的我还hold不住Jekyll。没实现`只要写好MD格式的post并提交，其他都不用管`的目标，所以写了一篇博文之后就晾着了。
+16年底我又回来了，缘起于一个清新的 `Hexo` 主题[Next](https://github.com/iissnan/hexo-theme-next)（[预览](http://notes.iissnan.com/)）。这次实现了需要的目标嘿嘿。
 > - 用 Hexo 建站，使用你要的主题
 - 启用 Github-Pages ，并使用 Travis-CI 自动更新
 
