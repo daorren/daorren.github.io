@@ -27,7 +27,7 @@ after_script:
   - git config user.email "daorenmc@gmail.com"
   - git add .
   - git commit -m "Update by Travis CI"
-  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master
+  - git push --force  "https://${GH_TOKEN}@${GH_REF}" master
 # # E: Build LifeCycle
 
 # safelist
