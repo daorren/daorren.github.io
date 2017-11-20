@@ -1,0 +1,617 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="hexo," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="一年多前，我看到一个很好看的 Jekyll 主题leonids（预览）。于是用它来建了第一个Github-Pages的博客。虽然他视觉元素很棒，但那时候的我还hold不住Jekyll。没实现只要写好MD格式的post并提交，其他都不用管的目标，所以写了一篇博文之后就晾着了。16年底我又回来了，缘起于一个清新的 Hexo">
+<meta name="keywords" content="hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何用Hexo新建一个blog">
+<meta property="og:url" content="http://yoursite.com/2016/12/29/how-I-build-my-new-blog-with-hexo/index.html">
+<meta property="og:site_name" content="daorren&#39;s Secrets">
+<meta property="og:description" content="一年多前，我看到一个很好看的 Jekyll 主题leonids（预览）。于是用它来建了第一个Github-Pages的博客。虽然他视觉元素很棒，但那时候的我还hold不住Jekyll。没实现只要写好MD格式的post并提交，其他都不用管的目标，所以写了一篇博文之后就晾着了。16年底我又回来了，缘起于一个清新的 Hexo 主题Next（预览）。这次实现了需要的目标嘿嘿。   用 Hexo 建站，使用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-20T02:57:56.750Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何用Hexo新建一个blog">
+<meta name="twitter:description" content="一年多前，我看到一个很好看的 Jekyll 主题leonids（预览）。于是用它来建了第一个Github-Pages的博客。虽然他视觉元素很棒，但那时候的我还hold不住Jekyll。没实现只要写好MD格式的post并提交，其他都不用管的目标，所以写了一篇博文之后就晾着了。16年底我又回来了，缘起于一个清新的 Hexo 主题Next（预览）。这次实现了需要的目标嘿嘿。   用 Hexo 建站，使用">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 如何用Hexo新建一个blog | daorren's Secrets </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-97826694-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">daorren's Secrets</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                如何用Hexo新建一个blog
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-29T10:41:43+00:00" content="2016-12-29">
+              2016-12-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一年多前，我看到一个很好看的 <code>Jekyll</code> 主题<a href="https://github.com/renyuanz/leonids" target="_blank" rel="noopener">leonids</a>（<a href="https://renyuanz.github.io/leonids/" target="_blank" rel="noopener">预览</a>）。于是用它来建了第一个Github-Pages的博客。虽然他视觉元素很棒，但那时候的我还hold不住Jekyll。没实现<code>只要写好MD格式的post并提交，其他都不用管</code>的目标，所以写了一篇博文之后就晾着了。<br>16年底我又回来了，缘起于一个清新的 <code>Hexo</code> 主题<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">Next</a>（<a href="http://notes.iissnan.com/" target="_blank" rel="noopener">预览</a>）。这次实现了需要的目标嘿嘿。</p>
+<blockquote>
+<ul>
+<li>用 Hexo 建站，使用你要的主题</li>
+<li>启用 Github-Pages ，并使用 Travis-CI 自动更新</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<h2 id="Hexo建站"><a href="#Hexo建站" class="headerlink" title="Hexo建站"></a>Hexo建站</h2><p>安装 Hexo 并建站，下面列出概要，具体参考<a href="https://hexo.io/zh-cn/docs/setup.html" target="_blank" rel="noopener">Hexo中文文档</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 hexo</span></span><br><span class="line">npm install hexo-cli -g</span><br><span class="line"><span class="comment"># 开始建站</span></span><br><span class="line">hexo init my_blog</span><br><span class="line"><span class="comment"># 新建一个 post</span></span><br><span class="line">hexo new <span class="string">"my_post"</span></span><br><span class="line"><span class="comment"># 清除缓存</span></span><br><span class="line">hexo clean</span><br><span class="line"><span class="comment"># 打开 hexo 服务器</span></span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用主题"><a href="#使用主题" class="headerlink" title="使用主题"></a>使用主题</h2><p>Hexo 的主题，是一种可插拔的设计，主题文件在 <code>/themes/</code> 目录下，可以在 <code>_config.yml</code> 文件中配置<br>这里使用 Next 主题，安装使用参考 <a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">Next主题中文文档</a>，<br>这里有两个可能产生问题的点。</p>
+<h3 id="下载主题"><a href="#下载主题" class="headerlink" title="下载主题"></a>下载主题</h3><p>这一步文档中推荐使用 <code>git clone</code>，劝大家不要这样做。因为你clone下来是一个完整的仓库，寄宿在你的blog仓库下，如果不用 <code>git submodule</code> 来管理的话，后面部署到Github-Pages的时候会遇到 <code>Page build failed: themes/next was not properly initialized with a .gitmodules file</code> 的问题。<br>所以正确的姿势是，<code>git submodule add https://github.com/iissnan/hexo-theme-next themes/next</code>。<br>当然，我是不会说，其实我是下载一个release版本压缩包，然后解压到themes/next目录的，因为网速太慢了（记得删除包内的.git文件夹</p>
+<h3 id="设置菜单"><a href="#设置菜单" class="headerlink" title="设置菜单"></a>设置菜单</h3><p>文档中提到，除了主页和归档页，其他都要手动创建。用过 Jekyll 的人，可能会以为要写一些DSL，来创建 分类页、标签页 这样的页面了。<br>但是，其实这里也是万分简单，next已经帮你搞定了。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果你需要创建 标签页</span></span><br><span class="line">hexo new page <span class="string">"tags"</span></span><br><span class="line"><span class="comment"># 分类页也是一样创建</span></span><br><span class="line">hexo new page <span class="string">"categories"</span></span><br></pre></td></tr></table></figure></p>
+<p>细心的你会发现，这里多了一个 <code>page</code> 参数，这条命令不会在 <code>_posts</code> 目录下创建md文件，而是在 <code>source</code> 目录下，创建 <code>tags/index.md</code>。而到浏览器一看，基本可用了诶！</p>
+<h2 id="启用-Github-Pages"><a href="#启用-Github-Pages" class="headerlink" title="启用 Github-Pages"></a>启用 Github-Pages</h2><p>这里推荐先扫一扫文档 <a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="noopener">Hexo部署</a>。<br>其部署原理是，<code>hexo g</code> 命令在 <code>public</code> 目录下生成整站静态文件，然后 <code>hexo d</code> 命令把 <code>public</code> 目录下所有文件复制到 <code>.deploy_git</code> 文件夹下（自身也是一个repo），并根据 <code>_config.yml</code> 文件中的配置，提交到相应的远程仓库和分支上去。最终Github-Pages 伺服的，其实是产生的静态文件——这些逻辑，我们将会在后面使用 Travis-CI 时用到<br>如果你在 Github 上用的仓库名是 <code>&lt;username&gt;.github.io</code> ，默认就会开启 Github-Pages，可以去项目的 <code>settings/options</code> 下面查看状态。这个情况下，github认为你这是个人的 Github-Pages，将会从 <code>master</code> 分支 build。所以推荐做法是，把你原本的代码，放到另一个分支上去（我自己放在 <code>code</code> 分支上）；产生的静态文件，放在 master 分支。</p>
+<h2 id="使用-Travis-CI-自动更新"><a href="#使用-Travis-CI-自动更新" class="headerlink" title="使用 Travis-CI 自动更新"></a>使用 Travis-CI 自动更新</h2><p>还记得我们的目标吗？只在 <code>code</code> 分支提交新 post，后续的 <code>hexo g</code>、push 到 master 分支上这样的小事，都不想操心。<br>固定的工作，正式 Travis-CI 所擅长的。但热闹是<code>Next</code>作者的，我什么也没有。<br>看看他的这篇文章，<a href="http://notes.iissnan.com/2016/publishing-github-pages-with-travis-ci/" target="_blank" rel="noopener">使用 Travis CI 自动更新 GitHub Pages</a>，原理是一样的。<br>（文章有个坑，<code>GH_TOKEN</code>的大小写，加密时和配置文件中一定要保持一致）</p>
+<p>在我们的情况下，不能直接用 Travis 执行 <code>hexo g --deploy</code>，原因是部署的时候，Travis-CI 需要你的信息，来往 Github 提交代码。所以我们只能放弃这条命令，手动做它实际做的事情，最后用上面链接中提到的认证方式，让 Travis-CI 来提交代码。</p>
+<blockquote>
+<p>假设你和我一样，之前没用过 github 的 Travis-CI，要先去 <a href="https://github.com/integrations" target="_blank" rel="noopener">github integrations</a> 登录 Travis-CI，然后在<a href="https://travis-ci.org/profile/" target="_blank" rel="noopener">Travis profile</a>开启支持。</p>
+</blockquote>
+<p>首先在个人设置那里，获取你的 <code>Personal Access Token</code>，然后用下面的方法加密<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 Travis CI 命令行工具</span></span><br><span class="line">gem install travis</span><br><span class="line"><span class="comment"># 加密 Personal Access Token</span></span><br><span class="line">travis encrypt -r &lt;username&gt;/&lt;repo_name&gt; GH_TOKEN=&lt;Personal Access Token&gt;</span><br></pre></td></tr></table></figure></p>
+<p>把加密之后的 <code>secret</code>，写入你的配置文件。下面贴一下我自己的 <code>.travis.yml</code></p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">language:</span> <span class="string">node_js</span></span><br><span class="line"><span class="attr">node_js:</span> <span class="string">stable</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Travis-CI Caching</span></span><br><span class="line"><span class="attr">cache:</span></span><br><span class="line"><span class="attr">  directories:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">node_modules</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># S: Build Lifecycle</span></span><br><span class="line"><span class="attr">install:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">npm</span> <span class="string">install</span></span><br><span class="line"></span><br><span class="line"><span class="attr">before_script:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">hexo</span> <span class="string">clean</span></span><br><span class="line"></span><br><span class="line"><span class="attr">script:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">hexo</span> <span class="string">generate</span> <span class="comment"># 生成静态文件</span></span><br><span class="line"></span><br><span class="line"><span class="attr">after_script:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">rm</span> <span class="bullet">-rf</span> <span class="string">.deploy_git</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">mkdir</span> <span class="string">.deploy_git</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">cp</span> <span class="bullet">-R</span> <span class="string">public/*</span> <span class="string">.deploy_git/</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">cd</span> <span class="string">.deploy_git</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">git</span> <span class="string">init</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">git</span> <span class="string">config</span> <span class="string">user.name</span> <span class="string">"daorren"</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">git</span> <span class="string">config</span> <span class="string">user.email</span> <span class="string">"abc@example.com"</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">git</span> <span class="string">add</span> <span class="string">.</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">git</span> <span class="string">commit</span> <span class="bullet">-m</span> <span class="string">"Update by Travis CI"</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">git</span> <span class="string">push</span> <span class="bullet">--force</span> <span class="bullet">--quiet</span> <span class="string">"https://$&#123;GH_TOKEN&#125;@$&#123;GH_REF&#125;"</span> <span class="string">master</span></span><br><span class="line"><span class="comment"># # E: Build LifeCycle</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># safelist</span></span><br><span class="line"><span class="attr">branches:</span></span><br><span class="line"><span class="attr">  only:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">code</span> <span class="comment"># 只在这个分支build</span></span><br><span class="line"><span class="attr">env:</span></span><br><span class="line"><span class="attr"> global:</span></span><br><span class="line"><span class="attr">   - GH_REF:</span> <span class="string">github.com/daorren/daorren.github.io.git</span></span><br><span class="line"><span class="attr">   - secure:</span> <span class="string">"XXX"</span></span><br></pre></td></tr></table></figure>
+<p>做到这里，基本就好了。总的来说，我是更喜欢 Hexo 的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag">#hexo</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/12/run-your-webapp-in-electron/" rel="prev" title="用Electron把任意WebApp打包成跨平台桌面应用">
+                用Electron把任意WebApp打包成跨平台桌面应用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="daorren" />
+          <p class="site-author-name" itemprop="name">daorren</p>
+          <p class="site-description motion-element" itemprop="description">Call me Maybe</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/daorren/" target="_blank" title="Douban">
+                  
+                    <i class="fa fa-fw fa-film"></i>
+                  
+                  Douban
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/daorren" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo建站"><span class="nav-number">1.</span> <span class="nav-text">Hexo建站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用主题"><span class="nav-number">2.</span> <span class="nav-text">使用主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载主题"><span class="nav-number">2.1.</span> <span class="nav-text">下载主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置菜单"><span class="nav-number">2.2.</span> <span class="nav-text">设置菜单</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启用-Github-Pages"><span class="nav-number">3.</span> <span class="nav-text">启用 Github-Pages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Travis-CI-自动更新"><span class="nav-number">4.</span> <span class="nav-text">使用 Travis-CI 自动更新</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">daorren</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

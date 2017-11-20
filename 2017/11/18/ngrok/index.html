@@ -1,0 +1,616 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="frp,ngrok," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="大家平时在工作中，可能会遇到这样的问题：本机处在一个内网环境中、没有外网IP，但如果希望运行在本机的服务，让外网也能够访问，怎么做到呢？ 接下来就介绍几种方法，可以解决这样的问题，思路都是一致的，依靠一个拥有公网IP的机器中转，把内网映射出去。 简单法：直接运行 ngrok/localtunnelngrok 和 loc">
+<meta name="keywords" content="frp,ngrok">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何让外网访问本机服务">
+<meta property="og:url" content="http://yoursite.com/2017/11/18/ngrok/index.html">
+<meta property="og:site_name" content="daorren&#39;s Secrets">
+<meta property="og:description" content="大家平时在工作中，可能会遇到这样的问题：本机处在一个内网环境中、没有外网IP，但如果希望运行在本机的服务，让外网也能够访问，怎么做到呢？ 接下来就介绍几种方法，可以解决这样的问题，思路都是一致的，依靠一个拥有公网IP的机器中转，把内网映射出去。 简单法：直接运行 ngrok/localtunnelngrok 和 localtunnel 都是开箱即用的工具，其原理是服务提供商提供了域名，为你的服务做">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-20T02:57:56.750Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何让外网访问本机服务">
+<meta name="twitter:description" content="大家平时在工作中，可能会遇到这样的问题：本机处在一个内网环境中、没有外网IP，但如果希望运行在本机的服务，让外网也能够访问，怎么做到呢？ 接下来就介绍几种方法，可以解决这样的问题，思路都是一致的，依靠一个拥有公网IP的机器中转，把内网映射出去。 简单法：直接运行 ngrok/localtunnelngrok 和 localtunnel 都是开箱即用的工具，其原理是服务提供商提供了域名，为你的服务做">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 如何让外网访问本机服务 | daorren's Secrets </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-97826694-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">daorren's Secrets</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                如何让外网访问本机服务
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-11-18T10:41:43+00:00" content="2017-11-18">
+              2017-11-18
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>大家平时在工作中，可能会遇到这样的问题：本机处在一个内网环境中、没有外网IP，但如果希望运行在本机的服务，让外网也能够访问，怎么做到呢？</p>
+<p>接下来就介绍几种方法，可以解决这样的问题，思路都是一致的，依靠一个拥有公网IP的机器中转，把内网映射出去。</p>
+<h2 id="简单法：直接运行-ngrok-localtunnel"><a href="#简单法：直接运行-ngrok-localtunnel" class="headerlink" title="简单法：直接运行 ngrok/localtunnel"></a>简单法：直接运行 ngrok/localtunnel</h2><p><a href="https://ngrok.com/download" target="_blank" rel="noopener">ngrok</a> 和 <a href="https://github.com/localtunnel/localtunnel" target="_blank" rel="noopener">localtunnel</a> 都是开箱即用的工具，其原理是服务提供商提供了域名，为你的服务做转发。你不需要自己准备中转的机器，只要下载这俩工具到本机，对于临时的访问需求可以直接使用。</p>
+<p>但是这两个工具又各有缺点，ngrok 首先是被墙了，其次如果你不是付费用户，每次启动 URL 都会发生变化；而 localtunnel 经常异常崩溃，可能需要额外的重启脚本。</p>
+<p>也就是说，如果你的情况比较特殊，比如需要和外部服务对接，映射出去的你本机的服务需要越稳定越好，这两种方式都不会是首选。</p>
+<a id="more"></a>
+<h2 id="普适：frp"><a href="#普适：frp" class="headerlink" title="普适：frp"></a>普适：frp</h2><p><a href="https://github.com/fatedier/frp" target="_blank" rel="noopener">frp</a> 是一个服务端-客户端架构的软件，其原理是你在作为中转的机器上安装 frp 服务端（称为 frps），在你的本机安装 frp 客户端（称为 frpc）。根据各自的配置，frps 会监听访问某个端口的请求，转发给与其已建立好连接的 frpc，frpc 再把请求转给你本机实际运行的服务，收到请求后整个转发链条再反过来。</p>
+<p>下面贴一个配置示例，其原理类似 ssh 隧道转发 tcp。（实际 frp 还支持其他，有兴趣的同学可以去探索一下）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> frpc.ini</span></span><br><span class="line">[common]</span><br><span class="line">server_addr = &lt;server ip&gt;</span><br><span class="line">server_port = &lt;frp port&gt;  # frpc connect frps</span><br><span class="line"></span><br><span class="line">[exposed]                 # just a name</span><br><span class="line">type = tcp</span><br><span class="line">local_port = 3000         # local service port</span><br><span class="line">remote_port = 10003       # for use</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> frps.ini</span></span><br><span class="line">[common]</span><br><span class="line">bind_port = 7000          # open for frpc</span><br></pre></td></tr></table></figure></p>
+<p>准备好一个带有公网IP的机器，下载好 frp ，做好 frps 的配置，然后执行 <code>frps -c frps.ini</code>；然后在你的本机也下载好 frp，如上进行 frpc 的配置（其中 <code>local_port</code> 是本机服务的运行端口，<code>remote_port</code> 是最终访问的端口），然后启动 <code>frpc -c frpc.ini</code>。</p>
+<p>接着访问 <code>&lt;server ip&gt;:&lt;remote_port&gt;</code> 时，请求会被转发到你本机的 <code>localhost:&lt;local_port&gt;</code>，完成！</p>
+<h2 id="更多：自建-ngrok"><a href="#更多：自建-ngrok" class="headerlink" title="更多：自建 ngrok"></a>更多：自建 ngrok</h2><p>尽管 frp 已经是个自建的转发服务，你拥有相当的控制权了，不过有时候，比如我的需求是转发 HTTPS 服务（HTTPS 需要域名，光是公网 IP 不够）时，还是不那么令人满意——当然可能是我太菜了🤔。如果还是使用 frp，尽管其内建支持 HTTPS，配置里却没有证书路径这一项，这一点让我很费解；如果是和 Nginx 配合（我自己安装 LetsEncrypt 颁发的 HTTPS 证书时，直接走的 Nginx 集成），<a href="https://github.com/fatedier/frp/issues/520" target="_blank" rel="noopener">也一直不能成功</a>。</p>
+<p>接着我 Google 到 <a href="https://imququ.com/post/self-hosted-ngrokd.html" target="_blank" rel="noopener">搭建 ngrok 服务实现内网穿透</a>，自建 ngrok 的工作原理跟第一种方式提到的 ngrok 差不多，只不过你自己就是域名提供者。在引用的这篇博文中，具体做法说得非常清楚，我不再赘述。</p>
+<p>但是结合 <a href="https://github.com/inconshreveable/ngrok/blob/master/docs/SELFHOSTING.md" target="_blank" rel="noopener">Ngrok self-hosting</a> 文档，我要做一些说明：</p>
+<ul>
+<li>编译服务端和客户端，除了环境变量和 Go 的包，其他都不依赖，尤其是不依赖作者在博文中生成的证书。基于此，任何编译出来的二进制文件都是不依赖域名或者证书的，我把 linux 平台和 Mac 平台的编译好的文件放在 <a href="https://github.com/daorren/ngrok/releases" target="_blank" rel="noopener">release</a> 中，可以直接使用。</li>
+<li>作者会基于域名生成证书，前提是假设没有域名的 HTTPS 证书。如果你已经购买，或者从 <a href="https://letsencrypt.org/" target="_blank" rel="noopener">letsencrypt</a> 获取了证书，也就没有必要做这一步。</li>
+<li>对于 HTTPS 绑定子域名的情况，比如 <code>pub.example.pub</code>，需要在客户端启动时指定，否则将是随机生成的一个 subdomain。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> server</span></span><br><span class="line">sudo ./bin/ngrokd -tlsKey=/&lt;path to&gt;/pub.example.pub/privkey.pem -tlsCrt=/&lt;path to&gt;/live/pub.example.pub/fullchain.pem -domain="example.pub" -httpAddr=":8082" -httpsAddr=":8083"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> client</span></span><br><span class="line">./ngrok -subdomain pub -proto=https -config=ngrok.cfg 3000</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>总结：如果需求特简单、自己也没有主机，直接下载 ngrok/localtunnel 使用即可；如果要求服务稳定 URL 不变化，且有拥有外网IP的主机，可以使用 frp，一次配置以后都可以用；如果有需求用 HTTPS 的，可以自建 ngrok。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/frp/" rel="tag">#frp</a>
+          
+            <a href="/tags/ngrok/" rel="tag">#ngrok</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/12/network-protocols/" rel="next" title="网络协议——写给每个懂点编程的同学">
+                <i class="fa fa-chevron-left"></i> 网络协议——写给每个懂点编程的同学
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="daorren" />
+          <p class="site-author-name" itemprop="name">daorren</p>
+          <p class="site-description motion-element" itemprop="description">Call me Maybe</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/daorren/" target="_blank" title="Douban">
+                  
+                    <i class="fa fa-fw fa-film"></i>
+                  
+                  Douban
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/daorren" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单法：直接运行-ngrok-localtunnel"><span class="nav-number">1.</span> <span class="nav-text">简单法：直接运行 ngrok/localtunnel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#普适：frp"><span class="nav-number">2.</span> <span class="nav-text">普适：frp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多：自建-ngrok"><span class="nav-number">3.</span> <span class="nav-text">更多：自建 ngrok</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">daorren</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

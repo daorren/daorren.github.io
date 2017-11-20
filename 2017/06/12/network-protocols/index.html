@@ -1,0 +1,685 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="网络协议,翻译," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="原本是我想了解一下底层网络的一些原理，看了几天《TCP/IP 详解 卷一》，但是这部书读起来十分吃力。这时候正好看到 hn谈到这篇 Network protocols。所以特地翻译过来，希望也能有人从中受益。本人知识有限，在一些译文处补充了原文用词来辅助理解，翻译不对之处欢迎指正。本文同时也发布在Ruby-China。">
+<meta name="keywords" content="网络协议,翻译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络协议——写给每个懂点编程的同学">
+<meta property="og:url" content="http://yoursite.com/2017/06/12/network-protocols/index.html">
+<meta property="og:site_name" content="daorren&#39;s Secrets">
+<meta property="og:description" content="原本是我想了解一下底层网络的一些原理，看了几天《TCP/IP 详解 卷一》，但是这部书读起来十分吃力。这时候正好看到 hn谈到这篇 Network protocols。所以特地翻译过来，希望也能有人从中受益。本人知识有限，在一些译文处补充了原文用词来辅助理解，翻译不对之处欢迎指正。本文同时也发布在Ruby-China。  网络栈技术，完成了几件看起来不可能的任务。它在不可靠网络基础上，实现了可靠">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-20T02:57:56.750Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络协议——写给每个懂点编程的同学">
+<meta name="twitter:description" content="原本是我想了解一下底层网络的一些原理，看了几天《TCP/IP 详解 卷一》，但是这部书读起来十分吃力。这时候正好看到 hn谈到这篇 Network protocols。所以特地翻译过来，希望也能有人从中受益。本人知识有限，在一些译文处补充了原文用词来辅助理解，翻译不对之处欢迎指正。本文同时也发布在Ruby-China。  网络栈技术，完成了几件看起来不可能的任务。它在不可靠网络基础上，实现了可靠">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 网络协议——写给每个懂点编程的同学 | daorren's Secrets </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-97826694-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">daorren's Secrets</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                网络协议——写给每个懂点编程的同学
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-12T10:25:40+00:00" content="2017-06-12">
+              2017-06-12
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>原本是我想了解一下底层网络的一些原理，看了几天《TCP/IP 详解 卷一》，但是这部书读起来十分吃力。这时候正好看到 <a href="https://news.ycombinator.com/item?id=14468471" target="_blank" rel="noopener">hn谈到</a>这篇 <a href="https://www.destroyallsoftware.com/compendium/network-protocols?share_key=97d3ba4c24d21147" target="_blank" rel="noopener">Network protocols</a>。所以特地翻译过来，希望也能有人从中受益。本人知识有限，在一些译文处补充了原文用词来辅助理解，翻译不对之处欢迎指正。本文同时也发布在<a href="https://ruby-china.org/topics/33160" target="_blank" rel="noopener">Ruby-China</a>。</p>
+</blockquote>
+<p>网络栈技术，完成了几件看起来不可能的任务。它在不可靠网络基础上，实现了可靠数据传输，传输过程中鲜有可察觉的问题出现。它在网络拥塞时能够平滑适应。它给网络中上十亿的活动节点提供地址。它能在受损的网络基础设施中，往正确的路线发送数据包，即使是乱序到达在接收端，也能将数据包重新装配成正确的顺序。它适应了深奥的模拟analog硬件需求，比如以太网电缆两端的电荷平衡。网络技术工作得如此之好，以至于网络用户们从没听说过它们，甚至大部分编写程序的工程师们也不知道底层究竟是如何工作的。</p>
+<a id="more"></a>
+<h2 id="网络路由"><a href="#网络路由" class="headerlink" title="网络路由"></a>网络路由</h2><p>在古老的模拟电话年代，打电话意味着建立一个连接你和你朋友的电话的、持续的、电子连接。仿佛真的有根电话线，直接在你和朋友之间工作。当然实际没有这根线——电话连接经过了复杂的交换系统——但是这个连接电子上等效于一根线。</p>
+<p>互联网的节点数太多了，不能套用这个方式。我们不可能给每一台机器与另一台机器都建立一个直接连接的、不被打断的路线用于通信。</p>
+<p>相应地，数据是由一个路由器发送给下一个路由器，每次传输都使数据离目的地更近一步，整个链式传递过程像<a href="https://www.wikiwand.com/en/Bucket_brigade" target="_blank" rel="noopener">传桶队列 Bucket-brigade</a>。举个例子，从我的笔记本到 google.com 之间，途径的每个路由器都连接着许多其他路由器，各自维护着一组不精确的路由表，路由表表示出哪些路由器更靠近互联网的哪一部分。当一组目的地是 google.com 的数据包到达时，路由器在路由表上进行快速查找，并发送数据包到更靠近谷歌的地方。数据包很小，所以传输链上路由器之间的数据传递耗时也极短。</p>
+<p>路由可以拆分成两个子问题。第一个是，地址：数据的目的地用什么表示？这个由 <a href="https://www.wikiwand.com/en/Internet_Protocol" target="_blank" rel="noopener">IP 协议</a>，其中的IP地址来处理。IPv4，作为最广泛使用的IP版本，提供的地址空间只有32位，已经<a href="https://blogs.igalia.com/dpino/2017/05/25/ipv4-exhaustion/" target="_blank" rel="noopener">全部被分配</a>，所以添加一个新的节点到公开的互联网只能重用已存在的IP地址。IPv6，允许使用 2^128 个地址（大约 10^38），在2017年只有20%左右的采用率。</p>
+<p>既然已经解决了地址的问题，我们现在需要知道如何在互联网上路由数据包到其目的地。路由是非常快的，没有时间在远端数据库中查询路由信息（所以只能在本地）。这速度有多快呢？举个例子， Cisco ASR 9922 路由器拥有着每秒最大160TB的处理能力。假设数据包是完整的1.5KB（12000位bit），那么每秒有133亿个数据包流经这个19英寸小机器。</p>
+<p>为了快速路由，路由器维护着指示着到达其他IP地址组路径的路由表。当一个新的数据包到达时，路由器查询路由表，告知这个数据包最接近目的地的路由器。这个路由器会把数据包发送到下一个路由器，然后再往下一个发送。<a href="https://en.wikipedia.org/wiki/Border_Gateway_Protocol" target="_blank" rel="noopener">BGP协议</a>的工作就是，在不同路由器之间沟通，保证路由表是最新的。</p>
+<h2 id="转换成数据包"><a href="#转换成数据包" class="headerlink" title="转换成数据包"></a>转换成数据包</h2><p>如果互联网的工作方式是，路由器互相之间沿着线路传递数据，那如果数据很大会发生什么？比如说，如果我们请求一个88.5MB的视频<a href="https://www.destroyallsoftware.com/talks/the-birth-and-death-of-javascript" target="_blank" rel="noopener">The Birth &amp; Death of JavaScript</a>。</p>
+<p>我们可以试试设计一个网络，在这当中88.5MB的文件直接由网络服务器发送给第一个路由器，然后第二个，如此下去。不幸的是，这样的网络不可能在互联网级别的规模下工作，甚至内网规模下都很难。</p>
+<p>首先，计算机的存储量是有限的。如果一个给定的路由只有88.4MB的可用缓存，那它就不能存储这个88.5MB的视频文件。这个数据会被直接丢弃，甚至更糟，我完全不知道这件事的发生。如果路由器是如此忙碌以至于丢弃了数据之后，都没时间告诉我它丢弃了数据。</p>
+<p>其次，计算机都是不可靠的。有时，路由节点崩溃。有时，船只的⚓️意外损坏水下光缆，<a href="https://www.wikiwand.com/en/2008_submarine_cable_disruption" target="_blank" rel="noopener">导致互联网一大部分不可访问</a>。</p>
+<p>基于这些提到的以及更多原因，我们不会在互联网中传递88.5MB大小的消息。相反，我们把数据拆分成许多数据包，大小通常在1.4KB左右。我们的视频文件将被拆分成63214左右个分隔的数据包用于传输。</p>
+<h2 id="乱序数据包"><a href="#乱序数据包" class="headerlink" title="乱序数据包"></a>乱序数据包</h2><p>使用抓包工具<a href="https://www.wireshark.org/" target="_blank" rel="noopener">Wireshark</a>观察<a href="https://www.destroyallsoftware.com/talks/the-birth-and-death-of-javascript" target="_blank" rel="noopener">The Birth &amp; Death of JavaScript</a>的一次真实传输，我能看到接收了一共 61807 个数据包，每个 1432 字节。两者相乘，我们得到88.5MB，这正是视频文件的大小。（这不包括其他协议的开支，如果包含的话，数字会更大些）</p>
+<p>这次传输是基于HTTP，一种基于<a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol" target="_blank" rel="noopener">TCP</a>的协议。传输花了 14 秒，所以平均每秒有 4400 个数据包到达，或者说每个数据包花了250毫秒到达。在这14秒中，我的计算机接收了所有 61807 个数据包，也许不是按顺序接收，在接收过程中进行重新装配成完整文件。</p>
+<p>TCP数据包重新组装使用的是一种可想象的最简单的机制：计时器。每个数据包在发送时都被赋予一个序列号。在接收端，数据包按序列号排列。一旦他们全部排好顺序，没有间隔，我们就知道整个文件都接收到了没有丢失。</p>
+<p>（真实情况下，TCP序列号并非是每次增加一的整数，但这个细节在本文中并不重要。）</p>
+<p>就算如此，那我们怎么知道什么时候文件接收完成呢？TCP对此一无所知，这个是更高级别协议的职责。举个例子，HTTP响应response中包含一个叫做 <code>Content-Length</code> 的头部，说明了返回响应的总长度。客户端读取这个头字段，然后一直读取TCP数据包，重新装配它们，直到达到了此头字段指定的数据大小。这是为什么HTTP头部（以及其他大多数协议的头部）比响应载荷payload率先到达的原因之一，否则我们都不能知晓载荷的大小。</p>
+<p>当我们在说客户端的时候，我们实际在说整个接收数据的计算机。TCP组装是在内核中完成的，所以浏览器、curl和wget这样的应用不需要手动重新装配TCP数据包。但是内核不处理HTTP，所以应用需要理解 <code>Content-Length</code> 头字段并知晓需要读取多少字节。</p>
+<p>有了序列号和数据包重新排序，我们能传输大量数据，即使数据包是乱序的。但如果一个数据包在传输中丢失了，在HTTP响应中留下一个空洞怎么办？</p>
+<h2 id="传输窗口transmission-winsow与慢启动slow-start"><a href="#传输窗口transmission-winsow与慢启动slow-start" class="headerlink" title="传输窗口transmission winsow与慢启动slow start"></a>传输窗口transmission winsow与慢启动slow start</h2><p>我开着<a href="https://www.wireshark.org/" target="_blank" rel="noopener">Wireshark</a>下载了<a href="https://www.destroyallsoftware.com/talks/the-birth-and-death-of-javascript" target="_blank" rel="noopener">The Birth &amp; Death of JavaScript</a>。查看抓包记录，我能看到数据包一个接一个被成功接收。</p>
+<p>举个例子，一个序列号为 563321 的数据包到达了。像所有TCP数据包一样，它包含了一个“下一个包序号”，指示着接下来一个数据包的序列号。这个包的“下一个包序号”是 564753。传输过程中下一个数据包，的序列号确实是 564753，所以一切正常。这发生了数千次，随着连接开始加速传输数据。</p>
+<p>有时候，我的计算机发出一条消息给服务器说，打个比方，“我已经接收了包序号小于或等于 564753 的所有数据包。”这称为ACK，确认acknowledgement的简写，我的计算机确认接收服务器的数据包。在一个新的连接中，Linux内核每接收10个数据包后，就发出一个ACK。数字 10 由常数 <code>TCP_INIT_CWND</code> 控制，常数在内核源码中被<a href="http://elixir.free-electrons.com/linux/v4.5/source/include/net/tcp.h#L220" target="_blank" rel="noopener">定义</a>。</p>
+<p>（<code>TCP_INIT_CWND</code> 里的 CWND 表示 拥塞窗口 congestion window：同一时刻可以传输的数据总大小。）如果网络变得拥塞（超负荷），窗口大小减小，从而减慢数据包的传输。</p>
+<p>十个数据包是大约14KB，所以一开始的速度限制是14KB。这是TCP慢启动的部分：连接建立时拥塞窗口很小。如果没有数据包丢失，接受者将持续增加拥塞窗口，允许同时传输更多数据包。</p>
+<p>最终，将会有数据包丢失，所以接收窗口会减小，减慢传输。像这样自动调整拥塞窗口，以及其他参数，数据发送者和接收者让数据传输最大化利用网络带宽。</p>
+<p>这发生在连接的两端：每端都发出ACK确认消息，也维护各自的拥塞窗口。不对称窗口允许协议用不对称的上下行带宽，最大化利用网络连接，就像大多数住宅区和移动网络连接一样。</p>
+<h2 id="可靠传输"><a href="#可靠传输" class="headerlink" title="可靠传输"></a>可靠传输</h2><p>计算机是不可靠的，由计算机组成的网络更加不可靠。在像互联网这样的大规模网络中，失败是操作中常见的一部分，并且必须得到良好处理。在一个数据包网络中，这意味着重传：如果客户端接收了序号1和3的数据包，但没有接收到2，那么它需要要求服务器重新发出丢失的数据包。</p>
+<p>当每秒接收上千数据包时，比如下载我们的88.5MB视频时，错误几乎百分之百会产生。为了给大家展示，让我们打开Wireshark。很多数据包接收，一切看起来很正常。每个数据包都有一个“下一个包序号”，紧接着一个带着这个序号的数据包。</p>
+<p>突然问题出现了。第 6269 个数据包的“下一个包序号”是 7208745，但那个数据包并没有到达。相反，序列号为 7211609 的数据包到达了。这是一个乱序数据包：有东西丢失了。</p>
+<p>我们很难说出究竟什么出了问题。也许互联网中的一个中间路由器超负荷了，也许是我的本地路由器超负荷了。也许有人打开了微波炉，产生了电磁干扰，减慢了我的无线连接。无论如何，这个数据包丢失了，唯一的迹象是意外接收到的数据包。</p>
+<p>TCP并没有特别的“我丢失了一个数据包”消息。相反，ACK消息会被巧妙地复用来表明数据丢失。任何乱序的数据包，会导致接收者重复确认最后的“正确的”数据包——正确顺序的最后一个。实际上，接收者说的是：“我确认接收到了数据包5。在那之后我也接收到了别的数据，但我知道那不是数据包6，因为它并不匹配数据包5的下一个包序号。”</p>
+<p>如果只是两个数据包在传输时调换了顺序，这会导致一次额外的ACK，等到乱序数据包接收到之后一切就能正常继续下去。但是如果有个数据包真的丢失了，意外数据包将会一直到达，因而接收者会持续发出重复的、最后一个正常数据包的ACK消息。这会导致上百个重复的ACK消息。</p>
+<p>当数据发送者一下看到三个重复ACK消息，它就假定紧接着的数据包丢失了，并进行重新传输。这被称为TCP快速重传，因为它比以前的基于超时的做法要快一些。有趣的是，协议自身不会显式地去说“请立即重传这个消息！”相反，多个ACK消息从协议自然产生，作为重传的触发器。</p>
+<p>（一个有意思的思维实验：如果一部分重复的ACK消息也丢失了，没能到达数据发送者，会发生什么？）</p>
+<p>重传甚至在网络正常工作时都十分常见。在对下载88.5MB视频进行抓包的过程中，我看到了</p>
+<ul>
+<li>因为持续性成功传输，拥塞窗口迅速增大到了将近1MB。</li>
+<li>数千数据包按顺序出现，一切正常。</li>
+<li>一个数据包到达顺序不正确。</li>
+<li>数据继续以每秒几MB的速度涌入，但丢失的数据包依旧没出现。</li>
+<li>我的计算机发出了不少重复的最后正常数据包的ACK消息，但内核也存下待处理的乱序数据包，以备后续的重新组装。</li>
+<li>服务器接收到了重复的ACK，并重新发送了丢失的数据包</li>
+<li>我的客户端发出之前丢失的数据包，以及后续数据包的确认接收的消息。简单确认最近的数据包即可，它会隐式地确认之前所有的数据包都被接收。</li>
+<li>传输继续，但由于丢失的数据包，拥塞窗口变小了。</li>
+</ul>
+<p>这就是正常情况，这些在每次我对完整下载进行抓包时都会产生。TCP在自己的职责上做得是如此出色，以至于我们在日常使用中从没考虑过网络是不可靠的，尽管在正常情况下网络都会例行性地失败。</p>
+<h2 id="物理网络"><a href="#物理网络" class="headerlink" title="物理网络"></a>物理网络</h2><p>所有这些网络数据，都必须通过像铜线、光缆、无线电这样的物理媒介进行传输。而在物理层协议之中，以太网最为著名。它在互联网兴起之初的流行，导致了我们在设计其他协议的时候必须适应它的局限。</p>
+<p>首先，让我们把物理细节弄清楚。以太网与 RJ45 接头关系最紧密，后者看起来像更大的八针eight-pin版本的四针手机插孔four-pin phone jacks。以太网也连接着cat5（或cat5e，或cat6，或cat7）电缆，该电缆包含了拧成4对的8根电线。其他媒介也存在，但我们在家中最有可能遇到的就是这些：裹在保护套下的8根电线，以及与之相连的8针插头。</p>
+<p>以太网是一个物理层协议：描述了位信息如何转换成电线中的数字信号。它也是一个链路link层协议：描述了两个节点之间的直接连接。然而，这是单纯的点对点，对网络中数据是如何路由的并不关心。以太网这里没有TCP连接中的连接概念，也没有IP地址中的可重新分配的地址概念。</p>
+<p>作为一个协议，以太网有两个主要的工作。第一，每个设备需要意识到它连接着一些东西，并且连接速度这样的参数需要协商。</p>
+<p>第二，一旦链路link建立，以太网需要携带信息。像更高层次的TCP和IP协议一样，以太网的数据也拆分成数据包。数据包的核心是数据帧，帧有1.5KB的载荷，外加22字节的头部信息。头部信息中包含源MAC地址和目的地MAC地址，载荷长度，以及校验和checksum这样的信息。这些字段令人熟悉：工程师常常需要处理地址、长度以及校验和，我们也知道为什么它们是必须的。</p>
+<p>数据帧接着被其他层的头数据包裹起来，构造出完整的数据包。这些头部数据很…奇怪。它们已经开始和模拟电路系统的底层现实发生碰撞了，所以我们绝不想把这些数据放到软件协议中去。一个完整的以太网数据包包含：</p>
+<ul>
+<li>序言preamble，由56位交替的0和1构成（7字节）。设备使用这个来同步时钟，有点像人们数数发令“1-2-3-开始！”计算机不能数数超过1，所以他们通过说“10101010101010101010101010101010101010101010101010101010”来同步</li>
+<li>一个8位（1字节）起始帧分隔符，通常是十进制数字171（二进制表示是10101011）。它标识了序言的结尾，注意分隔符中开始还在重复“10”，直到末尾有个“11”。</li>
+<li>核心数据帧，包含了源地址、目标地址、载荷等等，如前所述。</li>
+<li>一个96位（12字节）的数据包间隔，其中的行是留空的。大胆猜测一下，这是留给设备休息的，因为它们很累了。</li>
+</ul>
+<p>总结一下上面：我们想要传输1.5KB数据。我们添加22字节的包含源地址、目标地址、数据大小以及校验和的头信息以创建数据帧。我们再添加额外的22字节的数据，为了适应硬件需求，这些构成了完整的以太网数据包。</p>
+<p>你也许会以为以太网已经是网络技术栈的最底层了。不是这样，但事情确实变得更奇怪了，因为模拟世界的对技术的影响更甚 pokes through even more。</p>
+<h2 id="现实世界中的网络"><a href="#现实世界中的网络" class="headerlink" title="现实世界中的网络"></a>现实世界中的网络</h2><p>数字系统并不存在，一切都是模拟的。</p>
+<p>假设我们有一个5伏特 CMOS 系统，（CMOS是一种数字系统，不熟悉也没关系。）这意味着，完全开启fully-on的信号将是5伏特，完全关闭的信号是0伏特。但是没有信号是完全开闭的，物理世界不这样工作。实际上，我们的5伏特 CMOS 系统，会把任何高于1.67伏特的信号看做1，低于1.67伏特的信号看做0。</p>
+<p>（1.67是5的1/3。我们不用关心为什么分界线在1/3。当然如果你想深究，这里有<a href="https://www.wikiwand.com/en/Logic_level" target="_blank" rel="noopener">维基百科说明</a>。另外，以太网不是CMOS，甚至跟CMOS都没有关系，但CMOS和它的1/3分界线能用来做一个简单说明make for a simple illustration）</p>
+<p>我们的以太网数据包必须经由一条物理线，也就是改变电线中的电压。以太网是一个5伏特的系统，所以我们会天真地以为，以太网协议中的1位bit是电线中的5伏特，0位是0伏特。但是有两个问题：首先，电压范围是-2.5伏特到+2.5伏特。其次，更奇怪的是，每组8位信息在到达电线之前，都会被拓展成10位。</p>
+<p>8位可以有256种取值，10位有1024种取值，所以可以想象有张表在它们之间映射。每个8位的字节能被映射成4种10字节的信息，后者到达接收终点之后会被还原成同一个8位字节。举个例子，10位的值 00.0000.0000 也许映射到 8位 0000.0000。但是也许 10位值 10.1010.1010 也能映射到同一个8位字节。当以太网设备不管看到 00.0000.0000 还是 10.1010.1010，它都能理解这是字节0（二进制 0000.0000）。</p>
+<p>（警告：下面可能需要一些电子电路知识）</p>
+<p>上面这种映射的存在，是为了服务一个极其模拟的需求 extremely analog need：平衡设备中的电压。假设这种8位到10位的编码不存在，并且我们需要发送的数据恰好都是二进制1。以太网的电压范围是-2.5伏特到+2.5伏特，所以我们会使以太网线的电压维持在+2.5伏特，继而一直从线的另一端吸引电子过来pulling electrons。</p>
+<p>为什么我们要关心一端从另一端获取电子呢？因为模拟世界是混乱的，可能会产生各种各样意外的影响。举个例子，这样会给低通滤波器中使用的电容器充电，使得信号电平中产生偏移，最终导致位错误。这些错误需要时间积累，但我们显然不希望，仅仅因为我们传输的二进制1比0多，两年之后网络设备中突然开始产生数据错误。</p>
+<p>（有关电子电路的说到这里）</p>
+<p>通过使用 <a href="https://www.wikiwand.com/en/8b/10b_encoding" target="_blank" rel="noopener">8位-10位 编码</a>，以太网能保持电线中的0和1的平衡，即使我们要发送的数据都是1或者都是0。硬件会检测0和1的比例，映射要发送的8位字节到不同的10位信号，以达到维持电荷平衡。（新的以太网标准，如10GB以太网，使用不同的更复杂的编码系统）</p>
+<p>到此打住，因为我们谈论的已经超出编程的范围了，但是必须要说明的是，还有更多协议相关问题是为了适应物理层。在许多情况下，解决硬件问题的方法，都在软件中实现，比如上文使用8位-10位编码来修正直流偏移DC offset。这对我们这样的工程师来说可能有点尴尬：我们习惯于假装软件生活在一个完美的柏拉图式的世界中，没有物理上庸俗的缺陷devoid of the vulgar imperfections of physicality。事实上，一切都是模拟的，适应这种复杂性是每个人的工作，当然也包括软件。</p>
+<h2 id="相互联接的网络栈"><a href="#相互联接的网络栈" class="headerlink" title="相互联接的网络栈"></a>相互联接的网络栈</h2><p>互联网协议族最好理解为一组层的集合。以太网提供物理数据传输以及两个点对点设备之间的链路。IP提供了地址层，允许路由器和大规模网络的存在，但是是无连接的，数据包双向传输却无从判断是否到达。TCP通过使用序列号、确认以及重传，添加了可靠的传输层。</p>
+<p>最终，应用层协议如HTTP建立在TCP之上。在这一层，我们已经有了地址，以及可靠传输和持续连接的幻觉illusion。IP和TCP将应用开发者，从重复实现数据包重传、地址处理等等的地狱中拯救出来。</p>
+<p>这些层的独立性是十分重要的。举个例子，当传输88.5MB视频有数据包丢失的时候，互联网的网络中枢路由器并不知道；只有我的计算机和网络服务器知道。这个弄丢了原始数据包的路由基础设施，还在尽职地将我计算机发出的许多重复的ACK消息路由到目的地去。有可能就是同一个路由器，弄丢了数据包，几毫秒之后又带着重发的数据包来了。这是理解互联网的一个重点：路由基础设施对TCP一无所知；它做的仅仅是路由。（当然这也有例外，不过大多数情况下就是这样）</p>
+<p>不同层的协议独立工作，但它们不是分开独立设计的。高层次协议通常建立在低层次协议基础上，HTTP建立在TCP上，TCP建立在IP上，IP建立在以太网上。更底层的设计决策，即使在几十年之后，也会影响到更高层次的决策。</p>
+<p>以太网是古老的，且涉及物理层，所以它的需求设置了基本参数。一个以太网载荷最大是1.5KB。</p>
+<p>IP数据包需要包含于以太网数据帧中。IP的最小头部大小是20字节，所以IP数据包的最大载荷是 1500 - 20 = 1480 字节。</p>
+<p>同样，TCP数据包需要包含于IP数据包中。TCP的最小头部大小也是20字节，所以TCP的最大载荷是 1480 - 20 = 1460 字节。在现实中，其他头部和协议会占据更多空间，保守估计TCP的载荷大小是1400字节。</p>
+<p>1400字节的限制影响了现代协议的设计。举个例子，HTTP请求通常很小。如果我们把它们塞进一个数据包而不是两个，就能减小丢失请求某部分的可能，从而减少需要TCP重传的可能。为了从小请求中挤出每个字节，<a href="http://httpwg.org/specs/rfc7540.html" target="_blank" rel="noopener">HTTP/2</a> 指定了头部压缩，头部通常很小。没有TCP、IP和以太网的情境的话，这看起来很不明智：为什么要压缩一个协议的头部，仅仅为了节约几字节大小的空间？因为，正如 HTTP/2 规范在第2节的介绍中所说，压缩允许“多个请求被压缩成一个数据包”。</p>
+<p>HTTP/2 的头部压缩是为了适应TCP的限制，这个限制来自IP的限制，再往上来自以太网的限制。而以太网在上世纪70年代发展起来的，1980年投入商用，并在1983年标准化。</p>
+<p>最后一个问题：为什么以太网的载荷大小设置在1500字节（1.5KB）呢？其实没有深层次的原因：只是一个很好的权衡考量。每个数据帧中有42字节大小的非载荷数据。如果载荷的最大值只有100字节，那么只有70%（100/142）的时间花在发送载荷上。而1500字节大小的载荷，意味着大约97%（1500/1542）的时间用于发送载荷，这样的效率是可观的。再增加数据包的大小的话，会需要设备拥有更大的缓冲区，这使得再提高一两个百分比的效率变得十分困难。简而言之，20世纪70年代末网络设备的RAM限制，导致HTTP/2 引入了头部压缩。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网络协议/" rel="tag">#网络协议</a>
+          
+            <a href="/tags/翻译/" rel="tag">#翻译</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/10/head-first-mysql/" rel="next" title="《深入浅出MySQL》笔记">
+                <i class="fa fa-chevron-left"></i> 《深入浅出MySQL》笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/18/ngrok/" rel="prev" title="如何让外网访问本机服务">
+                如何让外网访问本机服务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="daorren" />
+          <p class="site-author-name" itemprop="name">daorren</p>
+          <p class="site-description motion-element" itemprop="description">Call me Maybe</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/daorren/" target="_blank" title="Douban">
+                  
+                    <i class="fa fa-fw fa-film"></i>
+                  
+                  Douban
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/daorren" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络路由"><span class="nav-number">1.</span> <span class="nav-text">网络路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转换成数据包"><span class="nav-number">2.</span> <span class="nav-text">转换成数据包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#乱序数据包"><span class="nav-number">3.</span> <span class="nav-text">乱序数据包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传输窗口transmission-winsow与慢启动slow-start"><span class="nav-number">4.</span> <span class="nav-text">传输窗口transmission winsow与慢启动slow start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可靠传输"><span class="nav-number">5.</span> <span class="nav-text">可靠传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#物理网络"><span class="nav-number">6.</span> <span class="nav-text">物理网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#现实世界中的网络"><span class="nav-number">7.</span> <span class="nav-text">现实世界中的网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相互联接的网络栈"><span class="nav-number">8.</span> <span class="nav-text">相互联接的网络栈</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">daorren</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
