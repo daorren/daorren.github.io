@@ -44,7 +44,7 @@ bind_port = 7000          # open for frpc
 接着访问 `<server ip>:<remote_port>` 时，请求会被转发到你本机的 `localhost:<local_port>`，完成！
 
 ## 更多：自建 ngrok
-尽管 frp 已经是个自建的转发服务，你拥有相当的控制权了，有时候还是不那么令人满意，比如我的需求是转发 HTTPS 服务（HTTPS 需要域名，光是公网 IP 不够）。如果还是使用 frp，尽管其内建支持 HTTPS，配置里却没有证书路径这一项；如果是和 Nginx 配合（安装 LetsEncrypt 颁发的 HTTPS 证书时，直接走的 Nginx 集成），也一直不能成功。
+尽管 frp 已经是个自建的转发服务，你拥有相当的控制权了，不过有时候，比如我的需求是转发 HTTPS 服务（HTTPS 需要域名，光是公网 IP 不够）时，还是不那么令人满意——当然可能是我太菜了🤔。如果还是使用 frp，尽管其内建支持 HTTPS，配置里却没有证书路径这一项，这一点让我很费解；如果是和 Nginx 配合（我自己安装 LetsEncrypt 颁发的 HTTPS 证书时，直接走的 Nginx 集成），[也一直不能成功](https://github.com/fatedier/frp/issues/520)。
 
 接着我 Google 到 [搭建 ngrok 服务实现内网穿透](https://imququ.com/post/self-hosted-ngrokd.html)，自建 ngrok 的工作原理跟第一种方式提到的 ngrok 差不多，只不过你自己就是域名提供者。在引用的这篇博文中，具体做法说得非常清楚，我不再赘述。
 
@@ -56,7 +56,7 @@ bind_port = 7000          # open for frpc
 - 对于 HTTPS 绑定子域名的情况，比如 `pub.example.pub`，需要在客户端启动时指定，否则将是随机生成的一个 subdomain。
   ```shell
   # server
-  sudo ./bin/ngrokd -tlsKey=/<path to>/pub.example.pub/privkey.pem -tlsCrt=/<path to>/live/pub.example.pub/fullchain.pem -domain="machen.pub" -httpAddr=":8082" -httpsAddr=":8083"
+  sudo ./bin/ngrokd -tlsKey=/<path to>/pub.example.pub/privkey.pem -tlsCrt=/<path to>/live/pub.example.pub/fullchain.pem -domain="example.pub" -httpAddr=":8082" -httpsAddr=":8083"
 
   # client
   ./ngrok -subdomain pub -proto=https -config=ngrok.cfg 3000
